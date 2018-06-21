@@ -113,7 +113,46 @@ def main():
                     for forecast in forecasts:
                         te='Day: '+forecast.date+'| '+forecast.low+'°C~'+forecast.high+'°C'+'| '+forecast.text
                         magnito_bot.send_message(first_chat_id, te)
-			
+		
+		elif first_chat_text == 'sport':
+                    magnito_bot.send_message(first_chat_id, 'Input sports type : ')
+                    new_offset = first_update_id + 1
+                    updates=magnito_bot.get_updates(new_offset)
+                    if len(updates) > 0:
+                        for current_update in updates:
+                            #if 'text' not in current_update['message']:
+                            #    first_chat_text='New member'
+                            #else:
+                                first_chat_text = current_update['message']['text']
+                    
+                    matches = sports_py.get_sport_scores(first_chat_text)
+                    for match in matches:
+                        sp='{} vs {}: {}-{}'.format(match.home_team, match.away_team, match.home_score, match.away_score)
+                        magnito_bot.send_message(first_chat_id, sp)
+
+                elif first_chat_text == 'speak':
+                    r=sr.Recognizer() 
+					new_offset = first_update_id + 1
+                    with sr.Microphone() as source:
+                        magnito_bot.send_message(first_chat_id, 'Please wait. Calibrating microphone...')
+                        #print("Please wait. Calibrating microphone...") 
+                        r.adjust_for_ambient_noise(source, duration=5)
+                        magnito_bot.send_message(first_chat_id, 'Say something!')
+                        #print("Say something!")
+                        audio=r.listen(source)
+
+                    try:
+                        magnito_bot.send_message(first_chat_id, 'Google Speech Recognition thinks you said:')
+                        magnito_bot.send_message(first_chat_id, r.recognize_google(audio, language="zh-TW"))
+                        #first_chat_text = r.recognize_google(audio, language="zh-TW")
+                        #new_offset = first_update_id + 1                                    
+                        break                                 
+                    except sr.UnknownValueError:
+                        magnito_bot.send_message(first_chat_id, 'Google Speech Recognition could not understand audio')
+                        break
+                    except sr.RequestError as e:
+                        magnito_bot.send_message(first_chat_id, 'No response from Google Speech Recognition service: {0}'.format(e))
+                        break	
                 else :
                     magnito_bot.send_message(first_chat_id, 'Any request ? '+first_chat_name)
                     new_offset = first_update_id + 1 
