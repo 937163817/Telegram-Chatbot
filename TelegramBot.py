@@ -74,7 +74,46 @@ def main():
                 elif first_chat_text == 'hi':
                     magnito_bot.send_message(first_chat_id, 'How do you do '+first_chat_name)
                     new_offset = first_update_id + 1 
-					
+			
+		elif first_chat_text == 'news':
+                    magnito_bot.send_message(first_chat_id, '自由時報今日焦點新聞')
+                    dom = requests.get('http://news.ltn.com.tw/list/newspaper').text
+                    soup = BeautifulSoup(dom, 'html5lib')
+                    for ele in soup.find('ul', 'list').find_all('li'):
+                        #magnito_bot.send_message(first_chat_id,ele.find('a', 'tit').text.strip())
+                        hr='http://news.ltn.com.tw/'+ele.find('a').get('href')
+                        #magnito_bot.send_message(first_chat_id,'http://news.ltn.com.tw/')
+                        #magnito_bot.send_message(first_chat_id,ele.find('a').get('href'))
+                        magnito_bot.send_message(first_chat_id,hr)
+                    new_offset = first_update_id + 1
+
+                elif first_chat_text == 'weather':
+                    weather = Weather(unit=Unit.CELSIUS)
+                    lookup = weather.lookup(560743)
+                    condition = lookup.condition
+                    weather = Weather(unit=Unit.CELSIUS)
+                    magnito_bot.send_message(first_chat_id, 'Input your location : ')
+
+                    new_offset = first_update_id + 1
+                    updates=magnito_bot.get_updates(new_offset)
+                    if len(updates) > 0:
+                        for current_update in updates:
+                            if 'text' not in current_update['message']:
+                                first_chat_text='New member'
+                            else:
+                                first_chat_text = current_update['message']['text']
+                    #magnito_bot.send_message(first_chat_id,first_chat_text)
+                    
+                    new_offset = first_update_id + 1
+                    local=first_chat_text
+                    #local=first_chat_text
+                    
+                    location = weather.lookup_by_location(local)
+                    forecasts = location.forecast
+                    for forecast in forecasts:
+                        te='Day: '+forecast.date+'| '+forecast.low+'°C~'+forecast.high+'°C'+'| '+forecast.text
+                        magnito_bot.send_message(first_chat_id, te)
+			
                 else :
                     magnito_bot.send_message(first_chat_id, 'Any request ? '+first_chat_name)
                     new_offset = first_update_id + 1 
