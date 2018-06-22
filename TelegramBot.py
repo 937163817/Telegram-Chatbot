@@ -283,6 +283,31 @@ def main():
                             for match in matches:
                                 sp='{} vs {}: {}-{}'.format(match.home_team, match.away_team, match.home_score, match.away_score)
                                 magnito_bot.send_message(first_chat_id, sp)
+			elif first_chat_text == 'movie':
+                            page = get_web_page('https://tw.movies.yahoo.com/movie_thisweek.html')
+                            if page:
+                                movies = get_movies(page)
+                            for movie in movies:
+                                magnito_bot.send_message(first_chat_id,movie['ch_name'])
+                                magnito_bot.send_message(first_chat_id,movie['trailer_url'])
+                            new_offset = first_update_id + 1
+							
+                        elif first_chat_text == 'PTT':
+                            current_page = get_web_page('https://www.ptt.cc/bbs/Gossiping/index.html')
+                            if current_page:
+                                articles = []
+                                today = time.strftime("%m/%d").lstrip('0')
+                                current_articles, prev_url = get_articles(current_page, today)
+                                while current_articles:
+                                    articles += current_articles
+                                    current_page = get_web_page('https://www.ptt.cc' + prev_url)
+                                    current_articles, prev_url = get_articles(current_page, today)
+                                    threshold = 50
+
+                                for a in articles:
+                                    if int(a['push_count']) > threshold:
+                                        magnito_bot.send_message(first_chat_id,a['href'])
+                            new_offset = first_update_id + 1
                         break                                                      
                     except sr.UnknownValueError:
                         magnito_bot.send_message(first_chat_id, 'Sorry,I could not understand audio')
@@ -300,7 +325,7 @@ def main():
                         magnito_bot.send_message(first_chat_id,movie['trailer_url'])
                     new_offset = first_update_id + 1
 		
-                elif first_chat_text == 'ptt':
+                elif first_chat_text == 'PTT':
                     current_page = get_web_page('https://www.ptt.cc/bbs/Gossiping/index.html')
                     if current_page:
                         articles = []
