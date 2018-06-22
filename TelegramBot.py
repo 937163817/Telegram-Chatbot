@@ -42,7 +42,7 @@ class BotHandler:
         return last_update
 
 
-token = '606184614:AAEaapXpdRswzj3L--saKbCWr7K2kzyIcn0' #改成我們的token
+token = '581600809:AAE-g_1zc1qQAd1kYXwT48dHHEVsxU5O-PM' #改成我們的token
 magnito_bot = BotHandler(token) #Your bot's name
 
 
