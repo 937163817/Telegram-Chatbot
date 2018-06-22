@@ -1,0 +1,504 @@
+%Copyright 2014 Jean-Philippe Eisenbarth
+%This program is free software: you can 
+%redistribute it and/or modify it under the terms of the GNU General Public 
+%License as published by the Free Software Foundation, either version 3 of the 
+%License, or (at your option) any later version.
+%This program is distributed in the hope that it will be useful,but WITHOUT ANY 
+%WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+%PARTICULAR PURPOSE. See the GNU General Public License for more details.
+%You should have received a copy of the GNU General Public License along with 
+%this program.  If not, see <http://www.gnu.org/licenses/>.
+
+%Based on the code of Yiannis Lazarides
+%http://tex.stackexchange.com/questions/42602/software-requirements-specification-with-latex
+%http://tex.stackexchange.com/users/963/yiannis-lazarides
+%Also based on the template of Karl E. Wiegers
+%http://www.se.rit.edu/~emad/teaching/slides/srs_template_sep14.pdf
+%http://karlwiegers.com
+\documentclass{scrreprt}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage{color}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{CJKutf8}
+\usepackage[english]{babel}
+\hypersetup{
+    bookmarks=false,    % show bookmarks bar?
+    pdftitle={Software Requirement Specification},    % title
+    pdfauthor={Jean-Philippe Eisenbarth},                     % author
+    pdfsubject={TeX and LaTeX},                        % subject of the document
+    pdfkeywords={TeX, LaTeX, graphics, images}, % list of keywords
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,       % color of internal links
+    citecolor=black,       % color of links to bibliography
+    filecolor=black,        % color of file links
+    urlcolor=blue,        % color of external links
+    linktoc=page            % only page is linked
+}%
+\def\myversion{1.0 }
+\date{}
+%\title{%
+
+%}
+\usepackage{hyperref}
+\begin{document}
+
+\begin{flushright}
+    \rule{16cm}{5pt}\vskip1cm
+    \begin{bfseries}
+        \Huge{SOFTWARE REQUIREMENTS\\ SPECIFICATION}\\
+        \vspace{1.4cm}
+        for\\
+        \vspace{1.4cm}
+        $<$Chat daly helper$>$\\
+        \vspace{1.4cm}
+        \LARGE{Version \myversion approved}\\
+        \vspace{1.4cm}
+        Prepared by $<$1041225$>$\\
+	 $<$1041431$>$\\
+	 $<$1041209$>$\\
+	 $<$1021520$>$\\
+	 $<$1031451$>$\\
+        \vspace{1.4cm}
+        $<$YZU CSE$>$\\
+        \vspace{1.4cm}
+        \today\\
+    \end{bfseries}
+\end{flushright}
+
+\tableofcontents
+
+
+\chapter*{Revision History}
+
+\begin{center}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+	    Name & Date & Reason For Changes & Version\\
+        \hline
+	    1021520 & 18.06.21 & add bot base  &  1.0\\
+        \hline
+	    31 & 32 & 33 & 34\\
+        \hline
+    \end{tabular}
+\end{center}
+
+\chapter{Introduction}
+
+\section{Purpose}
+\begin{CJK}{UTF8}{bkai}{\large
+此程式為一溝通查詢bot，用來幫助生活資訊查詢。\\
+ex:新聞,天氣...等。}
+\end{CJK}
+
+\section{Document Conventions}
+\begin{CJK}{UTF8}{bkai}{\large
+此文檔以latex黑色預設large字體(12pt)撰寫，\\
+中文為標楷體(bkai)large字體撰寫。\\
+本文中連結皆以藍色表示，\\
+所有重要標示以紅色字體內容為主。\\
+若需更改內容以可開啟.tex之編輯器照上述字體大小修改即可。\\}
+\end{CJK}
+
+\section{Intended Audience and Reading Suggestions}
+\begin{CJK}{UTF8}{bkai}{\large
+閱讀者適用所有嘗試與bot對話用戶，
+與各式機器人開發人員。\\
+此文檔以pdf格式保存，\\
+若需閱讀建議以adobe軟體或各式可開啟pdf檔之瀏覽器閱讀。}
+\end{CJK}
+
+\section{Project Scope}
+\begin{CJK}{UTF8}{bkai}{\large
+此bot以python撰寫，運行於python3.x以上之環境。\\
+本項目是一個關鍵字查詢機器人，用於查詢生活方面資訊。\\
+他收到來自用戶的關鍵字需求，並提供相應的答案。\\
+例如，當它收到關鍵字"news"，它會印出今日頭條。\\
+}
+\end{CJK}
+
+\section{References}
+\begin{CJK}{UTF8}{bkai}{\large參照: \\
+Telegram bot 官方網站 : \url{https://core.telegram.org/bots} \\
+python api 網站 : \url{https://pypi.org/} \\
+Python3 reference : \url{https://docs.python.org/3/library/index.html} \\
+}
+\end{CJK}
+
+\chapter{Overall Description}
+
+\section{Product Perspective}
+\begin{CJK}{UTF8}{bkai}{\large
+Telegram為現今一大跨平台的即時通訊軟體，如同其他同類型軟體\\ ex : Line、Facebook Messenger，Telegram也提供Bot服務。\\
+我們的Bot便是建立在此服務下，他會接收特定關鍵字來查詢並提供相應答案。\\
+相較於一般網頁關鍵字搜尋，Bot會直接給予關鍵字的答案而不是網址。\\
+}
+\end{CJK}
+
+\section{Product Functions}
+\begin{CJK}{UTF8}{bkai}{\large
+我們的Bot會對以下關鍵字做出反應
+\begin{itemize}
+\item[-]news
+\item[-]weather
+\item[-]sport
+\item[-]speak
+\item[-]movie
+\item[-]PTT
+\end{itemize}
+並給予回答或是要求進一步的輸入。\\
+}
+\end{CJK}
+
+\section{Operating Environment}
+\begin{CJK}{UTF8}{bkai}{\large
+此程式需運行在Python3.x的版本，並安裝
+\begin{itemize}
+\item[-]sports_py
+\item[-]Weather
+\item[-]speech_recognition
+\item[-]BeautifulSoup
+\end{itemize}
+且擁有Telegram之app與可運行帳戶。\\
+}
+\end{CJK}
+
+\section{Design and Implementation Constraints}
+\begin{CJK}{UTF8}{bkai}{\large
+考慮往後此Bot的API新增與使用，{\color{red}請勿以Python3.0以下的版本運行或編輯}。\\
+請確任Telegram app的更新對Bot是否具影響。\\
+由於news是取用自由時報頭條，{\color{red}請注意自由時報網址的改動或更改成其他報社時擷取之關鍵字}。\\
+}
+\end{CJK}
+
+\section{User Documentation}
+\begin{CJK}{UTF8}{bkai}{\large
+此文黨包含用戶操作說明，無額外檔案。\\
+}
+\end{CJK}
+
+\section{Assumptions and Dependencies}
+\begin{CJK}{UTF8}{bkai}{\large
+若運行於Telegram以外具有Bot服務之通訊軟體，由於token與api相容問題可能會導致錯誤。\\
+由於此Bot無hook於其他外部sever，運行時須將python檔案開啟。\\
+因上述因素，若往後將其hook於任意sever上時，getUpdate參數可能會失效，請參閱Telegram Bot開發文件進行修改。\\
+}
+\end{CJK}
+\chapter{External Interface Requirements}
+
+
+\section{User Interfaces}
+\begin{CJK}{UTF8}{bkai}{\large
+我們使用Telegram所提供的使用者介面，\\
+用戶需要於Telegram官網申請一個Telegram帳戶才能夠使用本Bot。\\
+}
+\end{CJK}
+
+\section{Hardware Interfaces}
+\begin{CJK}{UTF8}{bkai}{\large
+服務器直接連接到客戶端系統。\\
+客戶端還可以訪問數據庫以訪問帳戶的簡單訊息。\\
+客戶端訪問服務器中的數據庫只能讀取。\\
+}
+\end{CJK}
+
+\section{Software Interfaces}
+\begin{CJK}{UTF8}{bkai}{\large
+Telegram是一個跨平台的即時通訊軟體，\\
+它的用戶端是自由及開放原始碼軟體，\\
+但是它的伺服器是專有軟體。\\
+}
+\end{CJK}
+
+\section{Communications Interfaces}
+\begin{CJK}{UTF8}{bkai}{\large
+Telegram所採用的MTProto加密十分強大，\\
+讓用戶與用戶間的對談難以遭到他人攔截並解密，\\
+而該通訊軟體嚴謹的安全性也成為Telegram的主打特色之一。\\
+}
+\end{CJK}
+
+\chapter{System Features}
+
+\section{News}
+
+\subsection{Description and Priority}
+\begin{CJK}{UTF8}{bkai}{\large
+該功能會將網路上的新聞內容顯示於聊天室中，\\
+客戶端可以使用指令或語音呼叫此功能。\\
+}
+\end{CJK}
+
+\subsection{Stimulus/Response Sequences}
+\begin{CJK}{UTF8}{bkai}{\large
+1)在聊天室中打上news指令\\
+2)bot將會把新聞以及該新聞的連結於聊天室中顯示\\
+}
+\end{CJK}
+
+
+\subsection{Functional Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+bot會偵測你輸入的指令，\\
+如果輸入的字元不符合指令，\\
+bot會請你重新輸入指令。\\
+\\
+輸入：在聊天室中打上指令\\
+輸出：把新聞以及該新聞的連結顯示於聊天室中\\
+}
+\end{CJK}
+
+\section{Weather}
+
+\subsection{Description and Priority}
+\begin{CJK}{UTF8}{bkai}{\large
+該功能會將網路上的天氣內容顯示於聊天室中，\\
+客戶端可以使用指令或語音呼叫此功能。\\
+}
+\end{CJK}
+
+\subsection{Stimulus/Response Sequences}
+\begin{CJK}{UTF8}{bkai}{\large
+1)在聊天室中打上weather指令\\
+2)bot將會詢問你需要獲取的天氣資訊位於哪個城市\\
+3)bot將會把該地區一周的氣溫以及天氣概況於聊天室中顯示\\
+}
+\end{CJK}
+
+
+\subsection{Functional Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+bot會偵測你輸入的指令，\\
+如果輸入的字元不符合指令，\\
+bot會請你重新輸入指令。\\
+\\
+輸入：在聊天室中打上指令\\
+輸出：詢問要查詢的城市\\
+輸入：在聊天室中打上城市\\
+輸出：把該地區一周的氣溫以及天氣概況顯示於聊天室中\\
+}
+\end{CJK}
+
+\section{Sports}
+
+\subsection{Description and Priority}
+\begin{CJK}{UTF8}{bkai}{\large
+該功能會將網路上的體育賽事比分顯示於聊天室中，\\
+客戶端可以使用指令或語音呼叫此功能。\\
+}
+\end{CJK}
+
+\subsection{Stimulus/Response Sequences}
+\begin{CJK}{UTF8}{bkai}{\large
+1)在聊天室中打上sports指令\\
+2)bot將會詢問你需要獲取哪種運動賽事的比分\\
+3)bot將會把該運動類型的賽事比分全部於聊天室中顯示\\
+}
+\end{CJK}
+
+
+\subsection{Functional Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+bot會偵測你輸入的指令，\\
+如果輸入的字元不符合指令，\\
+bot會請你重新輸入指令。\\
+\\
+輸入：在聊天室中打上指令\\
+輸出：詢問要查詢的運動賽事類型\\
+輸入：在聊天室中打上運動賽事類型\\
+輸出：把該運動類型的賽事比分全部顯示於聊天室中\\
+}
+\end{CJK}
+
+\section{Speak}
+
+\subsection{Description and Priority}
+\begin{CJK}{UTF8}{bkai}{\large
+該功能會將語音辨識出並且顯示於聊天室中，\\
+如果唸出特殊指令會實現該功能，\\
+客戶端只能使用指令呼叫此功能。\\
+}
+\end{CJK}
+
+\subsection{Stimulus/Response Sequences}
+\begin{CJK}{UTF8}{bkai}{\large
+1)在聊天室中打上speak指令\\
+2)bot將會請你念一段文字\\
+3)bot將會把辨識出的語音於聊天室中顯示\\
+4)如果辨識出的語音是特殊指令，bot將會實現該功能\\
+}
+\end{CJK}
+
+
+\subsection{Functional Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+bot會偵測你輸入的指令，\\
+如果輸入的字元不符合指令，\\
+bot會請你重新輸入指令。\\
+bot會偵測你輸入的語音，\\
+如果輸入的語音不符合指令，\\
+bot只會印出文字不會執行指令。\\
+\\
+輸入：在聊天室中打上指令\\
+輸出：請你念一段文字\\
+輸入：念一段文字\\
+輸出：把該辨識出的語音轉成文字\\
+輸出：如果符合指令，就實現那項功能\\
+}
+\end{CJK}
+
+\section{Movie}
+
+\subsection{Description and Priority}
+\begin{CJK}{UTF8}{bkai}{\large
+該功能會將網路上的電影資訊顯示於聊天室中，\\
+客戶端可以使用指令或語音呼叫此功能。\\
+}
+\end{CJK}
+
+\subsection{Stimulus/Response Sequences}
+\begin{CJK}{UTF8}{bkai}{\large
+1)在聊天室中打上movie指令\\
+2)bot將會把該週的電影資訊全部於聊天室中顯示\\
+}
+\end{CJK}
+
+
+\subsection{Functional Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+bot會偵測你輸入的指令，\\
+如果輸入的字元不符合指令，\\
+bot會請你重新輸入指令。\\
+\\
+輸入：在聊天室中打上指令\\
+輸出：把該週的電影資訊全部顯示於聊天室中\\
+}
+\end{CJK}
+
+\section{Ptt}
+
+\subsection{Description and Priority}
+\begin{CJK}{UTF8}{bkai}{\large
+該功能會將ptt上的推數較多的八卦版連結顯示於聊天室中，\\
+客戶端可以使用指令或語音呼叫此功能。\\
+}
+\end{CJK}
+
+\subsection{Stimulus/Response Sequences}
+\begin{CJK}{UTF8}{bkai}{\large
+1)在聊天室中打上PTT指令\\
+2)bot將會把ptt上的推數較多的八卦版連結全部於聊天室中顯示\\
+}
+\end{CJK}
+
+
+\subsection{Functional Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+bot會偵測你輸入的指令，\\
+如果輸入的字元不符合指令，\\
+bot會請你重新輸入指令。\\
+\\
+輸入：在聊天室中打上指令\\
+輸出：把ptt上的推數較多的八卦版連結全部顯示於聊天室中\\
+}
+\end{CJK}
+
+\section{Food}
+
+\subsection{Description and Priority}
+\begin{CJK}{UTF8}{bkai}{\large
+該功能會將網路上評價高的店家顯示於聊天室中，\\
+客戶端可以使用指令或語音呼叫此功能。\\
+}
+\end{CJK}
+
+\subsection{Stimulus/Response Sequences}
+\begin{CJK}{UTF8}{bkai}{\large
+1)在聊天室中打上food指令\\
+2)bot將會詢問你需要獲取的店家資訊位於哪個城市\\
+3)bot將會把該地區評價高的店家於聊天室中顯示\\
+}
+\end{CJK}
+
+
+\subsection{Functional Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+bot會偵測你輸入的指令，\\
+如果輸入的字元不符合指令，\\
+bot會請你重新輸入指令。\\
+\\
+輸入：在聊天室中打上指令\\
+輸出：詢問要查詢的城市\\
+輸入：在聊天室中打上城市\\
+輸出：把該地區評價高的店家顯示於聊天室中\\
+}
+\end{CJK}
+
+\chapter{Other Nonfunctional Requirements}
+
+\section{Performance Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+news的性能主要為在使用者需要觀看時勢與社會接軌時可供使用者輸入關鍵字即可查閱資訊。\\
+weather的性能主要為使用者在室內準備外出時輸入關鍵字查詢不同地區的本周每天的最高溫度與最低溫度以及天氣狀況，使用者可根據資訊準備外出用具。\\
+sport的性能為供使用者觀看各種球類的最新比賽狀況，例如2018世界足球。\\
+speak的性能為使用者可語言輸入向bot輸入關鍵字，用聲音控制bot查詢所需要的關鍵字的資訊。\\
+movie的性能主要在使用者想觀看最新一周電影資訊時，可輸入關鍵字即可查閱電影資訊，提供娛樂選擇。\\
+PTT的性能為使用者想了解時事與網路風向、焦點時，可輸入關鍵字得到ptt上的推數較多的八卦版內容連結。\\
+food的性能主要為使用者輸入美食地點後提供相應地區評分較高之美食店家與連結資訊。\\
+}
+\end{CJK}
+
+\section{Safety Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+由於Telegram所採用的MTProto加密十分強大，讓用戶與用戶間的對談難以遭到他人攔截並解密，該通訊軟體嚴謹的安全性也成為Telegram的主打特色之一。
+}
+\end{CJK}
+
+\section{Security Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+任何關注私隱、通訊安全的用家必須了解到，世間並沒有絕對安全的通訊軟件，系統安全程度取決於其最弱一環。如果你的通訊內容非常重要，就須在每個環節都非常小心，例如避免打開不安全的連結及檔案，減少感染病毒、惡意軟件的機會。
+}
+\end{CJK}
+
+\section{Software Quality Attributes}
+\begin{CJK}{UTF8}{bkai}{\large
+我們在可用性提高加入了bot的描述介紹與提供查詢關鍵字詞列表。\\
+在可移植性與可維護性上，程式碼有加上注解與詳細的分段排列。\\
+我們也在可測試性上在程式碼中有以注解形式出現的測試程式碼。\\
+}
+\end{CJK}
+
+\section{Business Rules}
+\begin{CJK}{UTF8}{bkai}{\large
+任何有Telegram通訊軟體帳戶的使用者以及相對應的行動載具或網頁，在Telegram裏查詢輸入@my_neww2_bot，即可使用執行各種機器人裏的功能。\\
+}
+\end{CJK}
+
+\chapter{Other Requirements}
+\begin{CJK}{UTF8}{bkai}{\large
+使用者在輸入關鍵字詞使用機器人時需要以英文來進行，符合國際化。\\
+使用者不可以使用此功能性機器人進行違反法律的事項。\\
+}
+\end{CJK}
+
+\section{Appendix A: Glossary}
+\begin{CJK}{UTF8}{bkai}{\large
+label是用於識別詞彙表中的條目的唯一標籤，settings是用於定義條目的逗號分隔鍵=值對。\\
+有時，描述比一個段落更複雜。例如，可能希望有多個段落，分項列表，圖表，表格等等。\\
+}
+\end{CJK}
+
+\section{Appendix B: Analysis Models}
+\begin{CJK}{UTF8}{bkai}{\large
+None\\
+}
+\end{CJK}
+
+\section{Appendix C: To Be Determined List}
+\begin{CJK}{UTF8}{bkai}{\large
+我們有待將圖片或影像與音樂加入bot的功能，讓使用者只要輸入關鍵字如：image  video  music就可以有對應的功能。\\
+}
+\end{CJK}
+
+\end{document}
