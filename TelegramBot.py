@@ -1,8 +1,15 @@
 
 import requests
 import datetime
+import sports_py
+import speech_recognition as sr
+import telebot
+import re
+import time
 
-
+from icrawler.builtin import GoogleImageCrawler
+from bs4 import BeautifulSoup
+from weather import Weather, Unit
 
 class BotHandler:
     def __init__(self, token):
