@@ -331,6 +331,31 @@ def main():
                                     if int(a['push_count']) > threshold:
                                         magnito_bot.send_message(first_chat_id,a['href'])
                             new_offset = first_update_id + 1
+			elif first_chat_text == 'food':
+                            my_bot.send_message(first_chat_id, 'Input place : ')
+                            new_offset = first_update_id + 1
+                            updates=my_bot.get_updates(new_offset)
+                            if len(updates) > 0:
+                                for current_update in updates:
+                                    if 'text' not in current_update['message']:
+                                        first_chat_text='New member'
+                                    else:
+                                        first_chat_text = current_update['message']['text']
+                                
+                            LIST_URL = 'http://www.ipeen.com.tw/search/'+first_chat_text+'/000/1-0-0-0/'
+                    
+                            list_req = requests.get(LIST_URL)
+                            if list_req.status_code == requests.codes.ok:
+                                soup = BeautifulSoup(list_req.content, HTML_PARSER)
+                                shop_links_a_tags = soup.find_all('a', attrs={'data-label': '店名'})
+
+                                shop_links = []
+                                for link in shop_links_a_tags:
+                                    shop_link = ROOT_URL + link['href']
+                                    my_bot.send_message(first_chat_id,shop_link)
+                                    shop_links.append(shop_link)
+                                    parse_shop_information(shop_link)
+                            new_offset = first_update_id + 1
                         break                                                      
                     except sr.UnknownValueError:
                         magnito_bot.send_message(first_chat_id, 'Sorry,I could not understand audio')
