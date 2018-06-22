@@ -131,8 +131,8 @@ def main():
                         magnito_bot.send_message(first_chat_id, sp)
 
                 elif first_chat_text == 'speak':
+                    new_offset = first_update_id + 1
                     r=sr.Recognizer() 
-					new_offset = first_update_id + 1
                     with sr.Microphone() as source:
                         magnito_bot.send_message(first_chat_id, 'Please wait. Calibrating microphone...')
                         #print("Please wait. Calibrating microphone...") 
@@ -142,11 +142,54 @@ def main():
                         audio=r.listen(source)
 
                     try:
-                        magnito_bot.send_message(first_chat_id, 'I thinks you said:')
-                        magnito_bot.send_message(first_chat_id, r.recognize_google(audio, language="zh-TW"))
-                        #first_chat_text = r.recognize_google(audio, language="zh-TW")
-                        #new_offset = first_update_id + 1                                    
-                        break                                 
+                        magnito_bot.send_message(first_chat_id, 'I think you said:')
+                        s_tex = r.recognize_google(audio, language="zh-TW")
+                        magnito_bot.send_message(first_chat_id, s_tex)
+                        first_chat_text = s_tex
+                        if first_chat_text == 'news':
+                            magnito_bot.send_message(first_chat_id, '自由時報今日焦點新聞')
+                            dom = requests.get('http://news.ltn.com.tw/list/newspaper').text
+                            soup = BeautifulSoup(dom, 'html5lib')
+                            for ele in soup.find('ul', 'list').find_all('li'):
+                                hr='http://news.ltn.com.tw/'+ele.find('a').get('href')
+                                magnito_bot.send_message(first_chat_id,hr)
+                            new_offset = first_update_id + 1
+                        elif first_chat_text == 'weather':
+                            weather = Weather(unit=Unit.CELSIUS)
+                            lookup = weather.lookup(560743)
+                            condition = lookup.condition
+                            weather = Weather(unit=Unit.CELSIUS)
+                            magnito_bot.send_message(first_chat_id, 'Input your location : ')
+
+                            new_offset = first_update_id + 1
+                            updates=magnito_bot.get_updates(new_offset)
+                            if len(updates) > 0:
+                                for current_update in updates:
+                                    if 'text' not in current_update['message']:
+                                        first_chat_text='New member'
+                                    else:
+                                        first_chat_text = current_update['message']['text']
+                            new_offset = first_update_id + 1
+                            local=first_chat_text
+
+                            location = weather.lookup_by_location(local)
+                            forecasts = location.forecast
+                            for forecast in forecasts:
+                                te='Day: '+forecast.date+'| '+forecast.low+'°C~'+forecast.high+'°C'+'| '+forecast.text
+                                magnito_bot.send_message(first_chat_id, te)
+                    
+                        elif first_chat_text == 'sport':
+                            magnito_bot.send_message(first_chat_id, 'Input sports type : ')
+                            new_offset = first_update_id + 1
+                            updates=magnito_bot.get_updates(new_offset)
+                            if len(updates) > 0:
+                                for current_update in updates:
+                                    first_chat_text = current_update['message']['text']
+                            matches = sports_py.get_sport_scores(first_chat_text)
+                            for match in matches:
+                                sp='{} vs {}: {}-{}'.format(match.home_team, match.away_team, match.home_score, match.away_score)
+                                magnito_bot.send_message(first_chat_id, sp)
+                        break                                                      
                     except sr.UnknownValueError:
                         magnito_bot.send_message(first_chat_id, 'Sorry,I could not understand audio')
                         break
