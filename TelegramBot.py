@@ -142,19 +142,19 @@ def main():
                         audio=r.listen(source)
 
                     try:
-                        magnito_bot.send_message(first_chat_id, 'Google Speech Recognition thinks you said:')
+                        magnito_bot.send_message(first_chat_id, 'I thinks you said:')
                         magnito_bot.send_message(first_chat_id, r.recognize_google(audio, language="zh-TW"))
                         #first_chat_text = r.recognize_google(audio, language="zh-TW")
                         #new_offset = first_update_id + 1                                    
                         break                                 
                     except sr.UnknownValueError:
-                        magnito_bot.send_message(first_chat_id, 'Google Speech Recognition could not understand audio')
+                        magnito_bot.send_message(first_chat_id, 'Sorry,I could not understand audio')
                         break
                     except sr.RequestError as e:
                         magnito_bot.send_message(first_chat_id, 'No response from Google Speech Recognition service: {0}'.format(e))
                         break	
                 else :
-                    magnito_bot.send_message(first_chat_id, 'Any request ? '+first_chat_name)
+                    magnito_bot.send_message(first_chat_id, 'Enter another instruction\n╰(*°▽°*)╯'+first_chat_name)
                     new_offset = first_update_id + 1 
 					
 
